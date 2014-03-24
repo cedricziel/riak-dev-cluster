@@ -65,7 +65,8 @@ task :ping do
 end
 
 task :fetch_riak do
-  sh "curl -L #{RIAK_DOWNLOAD_URL} | tar xz -" unless File.exist? "riak-#{RIAK_VERSION}"
+  sh "curl -L #{RIAK_DOWNLOAD_URL} | tar xz" unless File.exist? "riak-#{RIAK_VERSION}"
+  sh "cd riak-#{RIAK_VERSION} && make rel"
 end
 
 task :fetch_riaknostic do
@@ -75,7 +76,7 @@ end
 
 task :copy_riak do
   (1..NUM_NODES).each do |n|
-    system %{cp -nr riak-#{RIAK_VERSION}/ riak#{n}}
+    system %{cp -nr riak-#{RIAK_VERSION}/rel/riak/* riak#{n}}
   end
 end
 
